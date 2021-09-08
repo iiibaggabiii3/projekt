@@ -10,6 +10,6 @@ def wzorce_projektowe():
     print("oraz")
     print("")
     print("Wzorzec behawioralny")
-    print("""Obserwator - utrzymuje listę obserwatorów, kótórych później powidamia
-             gdy zostani zmieniony stan obserwowanego obiektu""")
+    print("""Obserwator - utrzymuje listę obserwatorów, kótórych później powidamiają
+             gdy zostanie zmieniony stan obserwowanego obiektu""")
 wzorce_projektowe()
