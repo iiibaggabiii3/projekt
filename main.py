@@ -5,6 +5,7 @@ def wzorce_projektowe():
     print("Singleton - tworzenie jednej instancji na obiekt")
     print("oraz")
     print("")
-
+    print("Wzorzec strukturalny")
+    print("")
 
 wzorce_projektowe()
