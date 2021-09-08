@@ -23,6 +23,7 @@ s2 = Singleton_Genius("Elon", "Musk","b")
 s1.plik_tekstowy()
 s2.plik_tekstowy()
 
+print(s1==s2)
 a = 4
 b = a
 print("v1", b == a)
