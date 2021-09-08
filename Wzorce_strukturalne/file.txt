@@ -10,3 +10,5 @@ hhh
 000
 8
 to moj tekst
+test
+to moj tekst

@@ -14,11 +14,11 @@ def dekorator(func):
 
 @dekorator
 def witaj():
-    return input("wlasny tekst: ")
+    return input("własny tekst: ")
 
 @dekorator
 def cos_swojego():
-    return "to moj tekst"
+    return "to moj tekst testowy"
 
 t = witaj()
 cos_swojego()
