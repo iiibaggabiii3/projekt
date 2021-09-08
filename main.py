@@ -6,6 +6,6 @@ def wzorce_projektowe():
     print("oraz")
     print("")
     print("Wzorzec strukturalny")
-    print("")
+    print("Dekorator - Dodawanie obiektom nowych obowiązków")
 
 wzorce_projektowe()

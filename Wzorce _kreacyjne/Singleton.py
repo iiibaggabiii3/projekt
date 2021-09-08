@@ -18,8 +18,8 @@ class Singleton_Genius(object):
             plik.write("\n")
         plik.close()
 
-s1 = Singleton_Genius("Yang", "Zhou","a")
-s2 = Singleton_Genius("Elon", "Musk","b")
+s1 = Singleton_Genius("Yang", "Zhou","s1")
+s2 = Singleton_Genius("Elon", "Musk","s2")
 s1.plik_tekstowy()
 s2.plik_tekstowy()
 
