@@ -1,79 +1,78 @@
 from __future__ import annotations
-from random import randrange
 from typing import List
 
 
-class Produkt():
+class Produkt:
+    _lista_obserwatorow: List[Obserwator] = []
 
-    def attach(self, obserwujacy: Obserwator) -> None:
-        pass
+    def attach(self, observer: Obserwator) -> None:
+        print("dodany obserwator")
+        self._lista_obserwatorow.append(observer)
 
-    def detach(self, obserwujacy: Obserwator) -> None:
-        pass
-
-    def notify(self) -> None:
-        pass
-
-class Konkretny_produkt(Produkt):
-    _status_produkty = None
-    _Lista_obserwatorow: List[Obserwator] = []
-
-    def attach(self, obserwujacy: Obserwator) -> None:
-        print("Dodanie obserwatora")
-        self._Lista_obserwatorow.append(obserwujacy)
-
-    def detach(self, obserwujacy: Obserwator) -> None:
-        print("Usunięcie obserwatora")
-        self._Lista_obserwatorow.remove(obserwujacy)
+    def detach(self, observer: Obserwator) -> None:
+        self._lista_obserwatorow.remove(observer)
 
     def notify(self) -> None:
-        print("Powiadomienei obserwatorów")
-        for obserwujacy in self._Lista_obserwatorow:
-            obserwujacy.update(self)
-
-    def zdarzenie(self) -> None:
-        print("\nRobię coś ważnego")
-        self._status_produkty = randrange(0, 10)
-        print(f"Mój stan się zmienił: {self._status_produkty}")
-        self.notify()
+        for observer in self._lista_obserwatorow:
+            print("obserwator poinformowany")
+            observer.update(self)
 
 
-class Obserwator():
+    def sprawdzenie_iloci_znakow_w_pliku(self):
+        plik = open("text.txt", "r")
+        if plik.readable():
+            ile = len(plik.read())
+            plik.close()
+            return ile
+        else:
+            print("coś jest nie tak z plikiem")
 
-    def update(self, subject: Produkt) -> None:
+    def sprawdzenie_pliku(self, status):
+        "Biznesowa logika"
+        sprawdzany_plik = self.sprawdzenie_iloci_znakow_w_pliku()
+        # return "a: ", a, "sta;",abc
+        if sprawdzany_plik != status:
+            self.notify()
+        else:
+            return "brak zmian"
+
+class Obserwator:
+    def update(self, produkt: Produkt) -> None:
         pass
 
-class Obserwujacy_A(Obserwator):
+class Obserwator1(Obserwator):
     def update(self, produkt: Produkt) -> None:
-        if produkt._status_produkty < 3:
-            print("Obserwujacy_A: Zareagował na zdarzenie")
+        status = produkt.sprawdzenie_iloci_znakow_w_pliku()
+        print(f"obserwatorze dziękuje za informacje, jest teraz {status} znaki w pliku")
 
-
-class Obserwujacy_B(Obserwator):
+class Obserwator2(Obserwator):
     def update(self, produkt: Produkt) -> None:
-        if produkt._status_produkty == 0 or produkt._status_produkty >= 2:
-            print("Obserwujacy_B: Zareagował na zdarzenie")
+        status = produkt.sprawdzenie_iloci_znakow_w_pliku()
+        znaki = int(status)
+        if znaki <= 100:
+            print("obserwatorze, plik ma wiecej znaków niż 100")
+        else:
+            print("obserwatorze, plik ma mniej znaków nież 100")
 
-class Obserwujacy_C(Obserwator):
-    def update(self, produkt: Produkt) -> None:
-        if produkt._status_produkty == 3 or produkt._status_produkty >= 1:
-            print("Obserwujacy_C: Zareagował na zdarzenie")
+def pisanie_do_pliku(moj_tekst):
+    plik = open("text.txt", "a")
+    if plik.writable():
+        # plik.write("\n")
+        plik.write(moj_tekst)
+        plik.close()
+    else:
+        print("coś jest nie tak z plikiem")
 
 if __name__ == "__main__":
-    # The client code.
 
-    przedmiot = Konkretny_produkt()
-    obserwujacy_a = Obserwujacy_A()
-    przedmiot.attach(obserwujacy_a)
+    produkt = Produkt()
+    obserwator1 = Obserwator1()
+    produkt.attach(obserwator1)
 
-    obserwujacy_b = Obserwujacy_B()
-    przedmiot.attach(obserwujacy_b)
+    obserwator2 = Obserwator2()
+    produkt.attach(obserwator2)
 
-    obserwujacy_c = Obserwujacy_C()
-    przedmiot.attach(obserwujacy_c)
-
-    przedmiot.zdarzenie()
-    przedmiot.zdarzenie()
-    przedmiot.zdarzenie()
-
-
+    status = produkt.sprawdzenie_iloci_znakow_w_pliku()
+    print(status)
+    pisanie_do_pliku(input("wpisz swoj tekst do wpisania do pliku: "))
+    produkt.sprawdzenie_pliku(status)
