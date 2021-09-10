@@ -1,12 +1,22 @@
-class Singleton_Genius(object):
-    __instance = None
+from threading import Lock, Thread
 
-    def __new__(cls, *args, **kwargs):
-        if not Singleton_Genius.__instance:
-            Singleton_Genius.__instance = object.__new__(cls)
-        return Singleton_Genius.__instance
+class Singleton_Genius(type):
 
-    def __init__(self, first_name, last_name, text):
+    _instances = {}
+    _lock: Lock = Lock()
+
+    def __call__(cls, *args, **kwargs):
+        with cls._lock:
+            if cls not in cls._instances:
+                instance = super().__call__(*args, **kwargs)
+                cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class Singleton(metaclass=Singleton_Genius):
+
+    def __init__(self, value, first_name, last_name, text):
+        self.value = value
         self.first_name = first_name
         self.last_name = last_name
         self.text = text
@@ -20,40 +30,18 @@ class Singleton_Genius(object):
         else:
             print("Problem z otwarciem pliku")
 
-s1 = Singleton_Genius("Helm", "Gamma","string1")
-s2 = Singleton_Genius("Johnson", "Vlissides", "string2")
-s1.plik_tekstowy()
-s2.plik_tekstowy()
 
-print("Czy s1 i s2 to ten sam obiekt: ", s1==s2)
+if __name__ == "__main__":
+    s1 = Singleton("FOO","FOO","FOO","FOO5")
+    s2 = Singleton("BAR1","BAR1","BAR1","BAR5")
 
-object_id = id(s1)
-hexadecimal = hex(object_id)
-print(hexadecimal)
+    w1 = Thread(target=s1.plik_tekstowy, args=())
+    w2 = Thread(target=s2.plik_tekstowy, args=())
+    w1.start()
+    w2.start()
 
-object_id = id(s2)
-hexadecimal = hex(object_id)
-print(hexadecimal)
-
-class testowa:
-    def __init__(self, imie, nazwisko):
-        self.imie = imie
-        self.nazwisko = nazwisko
-
-    def przedstawiam_sie(self):
-        return f"nazywam sie:" + self.imie + " " + self.nazwisko
-
-print("")
-test = testowa("Lukasz", "Prządka")
-print(test.przedstawiam_sie())
-test1 = testowa("Lukasz", "Prządka")
-print(test.przedstawiam_sie())
-print("Czy test i test1 to ten sam obiekt: ", test == test1)
-
-object_id = id(test)
-hexadecimal = hex(object_id)
-print(hexadecimal)
-
-object_id = id(test1)
-hexadecimal = hex(object_id)
-print(hexadecimal)
+    # s1 = Singleton_Genius("Helm", "Gamma", "string1")
+    # s2 = Singleton_Genius("Johnson", "Vlissides", "string2")
+    # s1.plik_tekstowy()
+    # s2.plik_tekstowy()
+    #print("Czy s1 i s2 to ten sam obiekt: ", s1 == s2)
